@@ -42,7 +42,11 @@ let writeSendData = (res, data, specialData) => {
 		if (specialData) {
 			res.status(200).send(specialData);
 		} else {
-			res.status(200).send(data);
+			res.status(200).send(
+				{
+					data: data
+				}
+			);
 		}
 	}).catch((err) => {
 		logSendError(res, err);
