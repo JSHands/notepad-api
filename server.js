@@ -37,9 +37,13 @@ let readDataAsync = () => {
 	})
 };
 
-let writeSendData = (res, data) => {
+let writeSendData = (res, data, specialData) => {
 	writeDataAsync(data).then((data) => {
-		res.status(200).send(data);
+		if (specialData) {
+			res.status(200).send(specialData);
+		} else {
+			res.status(200).send(data);
+		}
 	}).catch((err) => {
 		logSendError(res, err);
 	});
@@ -158,7 +162,7 @@ app.delete('/notes/:id', (req, res) => {
 			data.splice(index,  1);
 		}
 		
-		writeSendData(res, data);
+		writeSendData(res, data, {index: index});
 		
 	}).catch((err) => {
 		logSendError(res, err);
