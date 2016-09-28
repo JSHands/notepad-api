@@ -70,7 +70,7 @@ app.get('/notes', (req,  res) => {
 		then((data) => {
 			res.status(200).send(data);
 	}).
-		catch((error) => {
+		catch((err) => {
 			logSendError(res, err);
 	});
 	
@@ -124,11 +124,46 @@ app.post('/notes', (req, res) => {
 		
 		data.push(req.body);
 		
-		writeSendData(res,  data);
+		writeSendData(res, data);
 		
 	}).catch((err) => {
 		logSendError(res, err);
 	});
+});
+
+// Delete an existing note
+
+app.delete('/notes/:id', (req, res) => {
+	
+	readDataAsync().then((data) => {
+		
+		try {
+			data = JSON.parse(data);
+		} catch (e) {
+			logSendError(res, e);
+		}
+		
+		let index = -1;
+		
+		console.log(req.params.id);
+		
+		data.forEach((note, i) => {
+			if (Number(note.id) === Number(req.params.id)) {
+				index = i;
+			}
+		});
+		
+		
+		if (index > -1) {
+			data.splice(index,  1);
+		}
+		
+		writeSendData(res, data);
+		
+	}).catch((err) => {
+		logSendError(res, err);
+	});
+	
 });
 
 app.listen(5000, () => {
